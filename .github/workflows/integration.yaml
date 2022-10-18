@@ -1,0 +1,49 @@
+---
+name: Integration/Regression
+
+on:
+  workflow_call:
+    inputs:
+      crs-config:
+        required: true
+        type: string
+
+jobs:
+  modsecurity-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+    matrix:
+      server: [modsec2-apache, modsec2-nginx]
+
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v2
+
+      - name: "Install dependencies"
+        run: |
+          wget https://github.com/coreruleset/coreruleset/archive/refs/tags/nightly.tar.gz -O /tmp/nightly.tar.gz
+          tar -zxvf /tmp/nightly.tar.gz -C /tmp/
+          curl -skLo - https://github.com/coreruleset/go-ftw/releases/latest/download/ftw_Linux_x86_64.tar.gz | tar -xzf - ftw
+      
+      - name: "Start ${{ matrix.server }} "
+        run: |
+          touch plugins/placeholder-config.conf
+          touch plugins/placeholder-before.conf
+          touch plugins/placeholder-after.conf
+
+          docker cp tests/integration/modsec-setup.conf nginx-nightly:/etc/modsecurity.d/setup.conf
+
+          echo '${{ inputs.crs_config }}' > /tmp/crs-setup.conf
+          docker-compose -f tests/integration/docker-compose.yml up -d ${{ matrix.server }}-nightly
+
+      - name: "Run plugin tests"
+        run: |
+          ./ftw check -d tests/regression/tests
+          ./ftw run -d tests/regression/tests
+        env:
+          FTW_LOGFILE: './tests/logs/{{ matrix.server }}/error.log'
+      
+      - name: "Tear down tests"
+        run: |
+          docker-compose -f tests/integration/docker-compose.yml down
