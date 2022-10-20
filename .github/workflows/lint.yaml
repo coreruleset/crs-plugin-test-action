@@ -23,7 +23,8 @@ jobs:
           config_data: |
             extends: default
             rules:
-              line-length: 1024
+              line-length:
+                max: 1024
               new-line-at-end-of-file:
                 level: warning
               trailing-spaces:
