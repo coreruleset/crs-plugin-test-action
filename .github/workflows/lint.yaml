@@ -19,7 +19,6 @@ jobs:
         uses: ibiqlik/action-yamllint@v3
         with:
           format: github
-          file_or_dir: tests/regression/tests
           config_data: |
             extends: default
             rules:

@@ -25,7 +25,7 @@ jobs:
           wget https://github.com/coreruleset/coreruleset/archive/refs/tags/nightly.tar.gz -O /tmp/nightly.tar.gz
           tar -zxvf /tmp/nightly.tar.gz -C /tmp/
           curl -skLo - https://github.com/coreruleset/go-ftw/releases/latest/download/ftw_Linux_x86_64.tar.gz | tar -xzf - ftw
- 
+
       - name: "Running integration tests for ${{ matrix.server }}"
         run: |
           touch plugins/placeholder-config.conf
