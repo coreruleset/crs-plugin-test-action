@@ -1,0 +1,64 @@
+version: "3.9"
+
+services:
+  common:
+    image: owasp/modsecurity-crs:apache
+    environment:
+      SERVERNAME: "_default_"
+      BACKEND: "http://backend:8080"
+      PORT: "80"
+      MODSEC_RULE_ENGINE: "DetectionOnly"
+      BLOCKING_PARANOIA: 4
+      MODSEC_AUDIT_LOG_FORMAT: Native
+      MODSEC_AUDIT_LOG_TYPE: Serial
+      MODSEC_AUDIT_LOG: "/var/log/modsec_audit.log"
+      MODSEC_TMP_DIR: "/tmp"
+      MODSEC_RESP_BODY_ACCESS: "On"
+      MODSEC_RESP_BODY_MIMETYPE: "text/plain text/html text/xml application/json"
+      COMBINED_FILE_SIZES: "65535"
+      CRS_ENABLE_TEST_MARKER: 1
+    ports:
+      - 80:80
+    volumes:
+      # If you use a relative path, remember that is relative to where the docker-compose.yml file is located.
+      - /tmp/coreruleset-nightly/rules:/opt/owasp-crs/rules:ro
+      - /tmp/coreruleset-nightly/crs-setup.conf.example:/etc/modsecurity.d/owasp-crs/crs-setup.conf.example
+      - ./logs/${SERVER}:/var/log:rw
+      - ./integration/load-plugins.conf:/etc/modsecurity.d/setup.conf:ro
+      - ../plugins:/etc/modsecurity.d/plugins
+    networks:
+      - crs-plugins-net
+
+  modsec2-apache:
+    extends: common
+    depends_on:
+      - backend
+    environment:
+      ERRORLOG: "/var/log/error.log"
+      ACCESSLOG: "/var/log/access.log"
+    ports:
+      - 80:80
+    entrypoint: ["/bin/sh", "-c", "/bin/cp /etc/modsecurity.d/owasp-crs/crs-setup.conf.example /etc/modsecurity.d/owasp-crs/crs-setup.conf && /docker-entrypoint.sh && apachectl -D FOREGROUND"]
+  
+  modsec3-nginx:
+    image: owasp/modsecurity-crs:nginx
+    extends: common
+    depends_on:
+      - backend
+    environment:
+      SERVERNAME: _
+      ERRORLOG: "/var/log/nginx/error.log"
+      ACCESSLOG: "/var/log/nginx/access.log"
+      LOGLEVEL: "info"
+    entrypoint: ["/bin/sh", "-c", "/bin/cp /etc/modsecurity.d/owasp-crs/crs-setup.conf.example /etc/modsecurity.d/owasp-crs/crs-setup.conf && /docker-entrypoint.sh && nginx -g 'daemon off;'"]
+
+  backend:
+    image: eexit/mirror-http-server #docker.io/kennethreitz/httpbin
+    networks:
+      - crs-plugins-net
+  
+volumes:
+  logs:
+networks:
+  crs-plugins-net:
+    driver: bridge

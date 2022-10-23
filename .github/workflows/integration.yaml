@@ -1,49 +1,45 @@
 ---
 name: Integration/Regression
-
-on:               # yamllint disable-line rule:truthy
+on: # yamllint disable-line rule:truthy
   workflow_call:
-    inputs:
-      crs-config:
-        required: true
-        type: string
-
 jobs:
   modsecurity-test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
     matrix:
-      server: [modsec2-apache, modsec2-nginx]
-
+      server: [modsec2-apache, modsec3-nginx]
     steps:
       - name: "Checkout repo"
         uses: actions/checkout@v3
-
-      - name: "Install dependencies"
+      - name: "Install tests dependencies"
         run: |
-          wget https://github.com/coreruleset/coreruleset/archive/refs/tags/nightly.tar.gz -O /tmp/nightly.tar.gz
-          tar -zxvf /tmp/nightly.tar.gz -C /tmp/
-          curl -skLo - https://github.com/coreruleset/go-ftw/releases/latest/download/ftw_Linux_x86_64.tar.gz | tar -xzf - ftw
-
+          # Get coreruleset and save it in /tmp/coreruleset-nightly
+          curl -skLo - https://github.com/coreruleset/coreruleset/archive/refs/tags/nightly.tar.gz | tar -zxvf - -C /tmp/
+          # Get ftw
+          curl -skLo - https://github.com/coreruleset/go-ftw/releases/latest/download/ftw_Linux_x86_64.tar.gz | tar xzf - ftw
+          # Create directory for integration tests files
+          mkdir -p tests/integration
+          # Get docker-compose file
+          curl -skL https://raw.githubusercontent.com/coreruleset/crs-plugin-test-action/main/tests/docker-compose.yml -o tests/docker-compose.yml
+          # Get modsecurity config to load CRS plugins
+          curl -skL https://raw.githubusercontent.com/coreruleset/crs-plugin-test-action/main/tests/integration/load-plugins.conf -o tests/integration/load-plugins.conf
+          # Create empty plugin files so web servers don't fail
+          touch plugins/placeholder-{after,before,config}.conf
       - name: "Running integration tests for ${{ matrix.server }}"
         run: |
-          touch plugins/placeholder-config.conf
-          touch plugins/placeholder-before.conf
-          touch plugins/placeholder-after.conf
-
-          docker cp tests/integration/modsec-setup.conf nginx-nightly:/etc/modsecurity.d/setup.conf
-
-          echo '${{ inputs.crs_config }}' > /tmp/crs-setup.conf
-          docker-compose -f tests/integration/docker-compose.yml up -d ${{ matrix.server }}-nightly
-
+          # Start up containers
+          docker-compose -f tests/docker-compose.yml up -d ${{ matrix.server }}
+        env:
+          SERVER: ${{ matrix.server }}
       - name: "Runing regression tests for ${{ matrix.server }}"
         run: |
           ./ftw check -d tests/regression/tests
           ./ftw run -d tests/regression/tests
         env:
           FTW_LOGFILE: './tests/logs/{{ matrix.server }}/error.log'
-
       - name: "Tear down tests"
         run: |
-          docker-compose -f tests/integration/docker-compose.yml down
+          docker-compose -f tests/docker-compose.yml down
+        env:
+          SERVER: ${{ matrix.server }}
