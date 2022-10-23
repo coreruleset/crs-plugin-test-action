@@ -7,8 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
-    matrix:
-      server: [modsec2-apache, modsec3-nginx]
+      matrix:
+        server: [modsec2-apache, modsec3-nginx]
     steps:
       - name: "Checkout repo"
         uses: actions/checkout@v3
@@ -34,8 +34,8 @@ jobs:
           SERVER: ${{ matrix.server }}
       - name: "Runing regression tests for ${{ matrix.server }}"
         run: |
-          ./ftw check -d tests/regression/tests
-          ./ftw run -d tests/regression/tests
+          ./ftw check -d tests/regression
+          ./ftw run -d tests/regression
         env:
           FTW_LOGFILE: './tests/logs/{{ matrix.server }}/error.log'
       - name: "Tear down tests"
