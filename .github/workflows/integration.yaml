@@ -2,6 +2,11 @@
 name: Integration/Regression
 on: # yamllint disable-line rule:truthy
   workflow_call:
+    inputs:
+      plugin-config:
+        required: false
+        type: string
+        default: ''
 jobs:
   modsecurity-test:
     runs-on: ubuntu-latest
@@ -26,6 +31,8 @@ jobs:
           curl -skL https://raw.githubusercontent.com/coreruleset/crs-plugin-test-action/main/tests/integration/load-plugins.conf -o tests/integration/load-plugins.conf
           # Create empty plugin files so web servers don't fail
           touch plugins/placeholder-{after,before,config}.conf
+          # Add plugin config
+          echo '${{ inputs.plugin-config }}' >> plugins/placeholder-config.conf
       - name: "Running integration tests for ${{ matrix.server }}"
         run: |
           # Start up containers
