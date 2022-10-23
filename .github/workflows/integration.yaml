@@ -44,7 +44,7 @@ jobs:
           ./ftw check -d tests/regression
           ./ftw run -d tests/regression
         env:
-          FTW_LOGFILE: './tests/logs/{{ matrix.server }}/error.log'
+          FTW_LOGFILE: './tests/logs/${{ matrix.server }}/error.log'
       - name: "Tear down tests"
         run: |
           docker-compose -f tests/docker-compose.yml down
