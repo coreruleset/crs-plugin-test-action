@@ -25,17 +25,19 @@ jobs:
           wget https://github.com/coreruleset/coreruleset/archive/refs/tags/nightly.tar.gz -O /tmp/nightly.tar.gz
           tar -zxvf /tmp/nightly.tar.gz -C /tmp/
           curl -skLo - https://github.com/coreruleset/go-ftw/releases/latest/download/ftw_Linux_x86_64.tar.gz | tar -xzf - ftw
+          mkdir -p tests/integration
+          # get latest docker-compose.yml file
+          curl -skL https://raw.githubusercontent.com/coreruleset/crs-plugin-test-action/main/tests/integration/docker-compose.yml \
+            -o tests/integration/docker-compose.yml
       
       - name: "Start ${{ matrix.server }} "
         run: |
-          touch plugins/placeholder-config.conf
-          touch plugins/placeholder-before.conf
-          touch plugins/placeholder-after.conf
-
-          docker cp tests/integration/modsec-setup.conf nginx-nightly:/etc/modsecurity.d/setup.conf
-
-          echo '${{ inputs.crs_config }}' > /tmp/crs-setup.conf
-          docker-compose -f tests/integration/docker-compose.yml up -d ${{ matrix.server }}-nightly
+          # create logs directory
+          mkdir -p tests/logs/${{ matrix.server }}
+          # use crs-config, if any
+          echo '${{ inputs.crs-config }}' > /tmp/crs-setup.conf
+          # start container
+          docker-compose -f tests/integration/docker-compose.yml up -d ${{ matrix.server }}
 
       - name: "Run plugin tests"
         run: |
