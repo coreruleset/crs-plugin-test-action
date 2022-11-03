@@ -9,6 +9,18 @@ There are two workflows:
   - this workflow receives an input named `config_file` that receives a string that is stored as a
     `crs-setup.conf` file
 
+An example input could be:
+```
+    with:
+      plugin-config: |
+        SecRule &TX:my-rule-exclusions-plugin_enabled "@eq 0" \
+          "id:1234567890,\
+          phase:1,\
+          pass,\
+          nolog,\
+          setvar:'tx.my-rule-exclusions-plugin_enabled=1'"
+```
+
 ## Writing tests for plugins
 
 Many plugins will target product exclusions, so when writing tests it is best to use the values on a rule and check that the targeted excluded rule is not being logged. An example tests could work like this:
