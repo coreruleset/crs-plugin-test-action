@@ -1,7 +1,7 @@
 ---
 name: Lint Plugin
 
-on:
+on:                  # yamllint disable-line rule:truthy
   workflow_call:
 
 
@@ -20,7 +20,21 @@ jobs:
         with:
           format: github
           file_or_dir: tests/regression/tests
-          config_file: .yamllint.yml
+          config_data: |
+            extends: default
+            rules:
+              new-line-at-end-of-file:
+                level: warning
+              trailing-spaces:
+                level: warning
+                rules:
+              line-length:
+                max: 1024
+                level: warning
+              indentation: disable
+              comments:
+                require-starting-space: true # default
+                min-spaces-from-content: 1
 
       - name: Linelint
         uses: fernandrone/linelint@master
