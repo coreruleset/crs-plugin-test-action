@@ -27,7 +27,6 @@ jobs:
                 level: warning
               trailing-spaces:
                 level: warning
-                rules:
               line-length:
                 max: 1024
                 level: warning
