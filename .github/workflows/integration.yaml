@@ -32,13 +32,15 @@ jobs:
           # get latest docker-compose.yml file
           curl -skL https://raw.githubusercontent.com/coreruleset/crs-plugin-test-action/main/tests/integration/docker-compose.yml \
             -o tests/integration/docker-compose.yml
+          curl -sKL  https://raw.githubusercontent.com/coreruleset/crs-plugin-test-action/main/tests/integration/modsec-setup.conf \
+            -o tests/integration/modsec-setup.conf
       
       - name: "Start ${{ matrix.server }} "
         run: |
           # create logs directory
           mkdir -p tests/logs/${{ matrix.server }}
           # use crs-config, if any
-          echo '${{ inputs.crs-config }}' > /tmp/crs-setup.conf
+          echo '${{ inputs.crs-config }}' > /tmp/crs-additional-setup.conf
           # start container
           docker-compose -f tests/integration/docker-compose.yml up -d ${{ matrix.server }}
 
