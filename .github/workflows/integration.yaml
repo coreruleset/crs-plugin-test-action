@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
-    matrix:
-      server: [modsec2-apache, modsec2-nginx]
+      matrix:
+        server: [modsec2-apache, modsec3-nginx]
 
     steps:
       - name: "Checkout repo"
