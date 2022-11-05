@@ -24,9 +24,11 @@ jobs:
       - name: "Install dependencies"
         run: |
           mkdir -p crs
-          curl -skLo - https://github.com/coreruleset/coreruleset/archive/refs/tags/${{ matrix.crs_version }}.tar.gz | tar -xvf - --strip-components=1 -C crs
-          curl -skLo - https://github.com/coreruleset/go-ftw/releases/download/v0.4.0/ftw_Linux_x86_64.tar.gz | tar -xzf - ftw
           mkdir -p tests/integration
+          # Get CRS
+          curl -skLo - https://github.com/coreruleset/coreruleset/archive/refs/tags/${{ matrix.crs_version }}.tar.gz | tar -xzf - --strip-components=1 -C crs
+          # Get go-ftw
+          curl -skLo - https://github.com/coreruleset/go-ftw/releases/download/v0.4.0/ftw_Linux_x86_64.tar.gz | tar -xzf - ftw
           # get latest docker-compose.yml file
           curl -skL https://raw.githubusercontent.com/coreruleset/crs-plugin-test-action/main/tests/integration/docker-compose.yml \
             -o tests/integration/docker-compose.yml
