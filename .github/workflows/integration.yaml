@@ -14,7 +14,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        server: [modsec2-apache, modsec3-nginx]
+        server: [apache, nginx]
+        crs_version: [nightly]
 
     steps:
       - name: "Checkout repo"
@@ -22,8 +23,8 @@ jobs:
 
       - name: "Install dependencies"
         run: |
-          wget https://github.com/coreruleset/coreruleset/archive/refs/tags/nightly.tar.gz -O /tmp/nightly.tar.gz
-          tar -zxvf /tmp/nightly.tar.gz -C /tmp/
+          mkdir -p crs
+          curl -skLo - https://github.com/coreruleset/coreruleset/archive/refs/tags/${{ matrix.crs_version }}.tar.gz | tar -xvf - --strip-components=1 -C crs
           curl -skLo - https://github.com/coreruleset/go-ftw/releases/download/v0.4.0/ftw_Linux_x86_64.tar.gz | tar -xzf - ftw
           mkdir -p tests/integration
           # get latest docker-compose.yml file
