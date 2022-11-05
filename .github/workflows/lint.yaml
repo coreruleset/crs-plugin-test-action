@@ -13,7 +13,7 @@ jobs:
     # check why is failing and change afterwards
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Lint Yaml
         uses: ibiqlik/action-yamllint@v3
@@ -40,9 +40,9 @@ jobs:
         id: linelint
 
       - name: Set up Python 3
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
-          python-version: 3.7
+          python-version: 3.8
 
       - name: "Check Plugin syntax"
         run: |
