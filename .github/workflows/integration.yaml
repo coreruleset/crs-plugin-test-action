@@ -8,6 +8,8 @@ on:                   # yamllint disable-line rule:truthy
         required: false
         type: string
 
+env:
+  go_ftw_version: "v0.4.3"
 jobs:
   modsecurity-test:
     runs-on: ubuntu-latest
@@ -26,9 +28,9 @@ jobs:
           mkdir -p crs
           mkdir -p tests/integration
           # Get CRS
-          curl -skLo - https://github.com/coreruleset/coreruleset/archive/refs/tags/${{ matrix.crs_version }}.tar.gz | tar -xzf - --strip-components=1 -C crs
+          gh release download -R coreruleset/coreruleset -A tar.gz -O - ${{ matrix.crs_version }} | tar -xzf - --strip-components=1 -C crs
           # Get go-ftw
-          curl -skLo - https://github.com/coreruleset/go-ftw/releases/download/v0.4.2/ftw_Linux_x86_64.tar.gz | tar -xzf - ftw
+          gh release download -R coreruleset/go-ftw -p 'ftw_*_linux_amd64.tar.gz' -O - ${{ env.go_ftw_version }} | tar -xzf - ftw
           # get latest docker-compose.yml file
           curl -skL https://raw.githubusercontent.com/coreruleset/crs-plugin-test-action/main/tests/integration/docker-compose.yml \
             -o tests/integration/docker-compose.yml
@@ -36,11 +38,13 @@ jobs:
             -o tests/integration/modsec-setup.conf
       
       - name: "Start ${{ matrix.server }} "
+        env:
+          EXTRA_CONF: ${{ inputs.crs-config }}
         run: |
           # create logs directory
           mkdir -p tests/logs/${{ matrix.server }}
           # use crs-config, if any
-          echo '${{ inputs.crs-config }}' > /tmp/crs-additional-setup.conf
+          echo "$EXTRA_CONF" > /tmp/crs-additional-setup.conf
           # start container
           docker-compose -f tests/integration/docker-compose.yml up -d ${{ matrix.server }}
 
