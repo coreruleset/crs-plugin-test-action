@@ -53,8 +53,8 @@ jobs:
 
       - name: "Run plugin tests"
         run: |
-          ./ftw check -d tests/regression/tests
-          ./ftw run -d tests/regression/tests
+          ./ftw check -d tests/regression
+          ./ftw run -d tests/regression
         env:
           FTW_LOGFILE: './tests/logs/{{ matrix.server }}/error.log'
       
