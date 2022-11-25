@@ -37,7 +37,7 @@ jobs:
           # get latest docker-compose.yml file
           curl -skL https://raw.githubusercontent.com/coreruleset/crs-plugin-test-action/main/tests/integration/docker-compose.yml \
             -o tests/integration/docker-compose.yml
-          curl -sKL  https://raw.githubusercontent.com/coreruleset/crs-plugin-test-action/main/tests/integration/modsec-setup.conf \
+          curl -skL  https://raw.githubusercontent.com/coreruleset/crs-plugin-test-action/main/tests/integration/modsec-setup.conf \
             -o tests/integration/modsec-setup.conf
       
       - name: "Start ${{ matrix.server }} "
