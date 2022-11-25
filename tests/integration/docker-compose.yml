@@ -26,9 +26,8 @@ services:
       - 80:80
     volumes:
       - ../../crs/rules:/opt/owasp-crs/rules:ro
-      - ./plugins:/etc/modsecurity.d/plugins:ro
-      - ./tests/logs/apache:/var/log:rw
-      - ./tests/integration/modsec-setup.conf:/etc/modsecurity.d/setup2.conf:ro
+      - ../../plugins:/etc/modsecurity.d/plugins:ro
+      - ../logs/apache:/var/log:rw
     networks:
       - crs-plugins-net
   
@@ -56,10 +55,9 @@ services:
     ports:
       - 80:80
     volumes:
+      - ../../plugins:/etc/modsecurity.d/plugins
       - ../../crs/rules:/opt/owasp-crs/rules:ro
-      - ./tests/logs/nginx:/var/log/nginx:rw
-      - ./tests/integration/modsec-setup.conf:/etc/modsecurity.d/setup.conf:ro
-      - ./plugins:/etc/modsecurity.d/plugins
+      - ../logs/nginx:/var/log/nginx:rw
     #entrypoint: ["/bin/sh", "-c", "/bin/cp /etc/modsecurity.d/owasp-crs/crs-setup.conf.example /etc/modsecurity.d/owasp-crs/crs-setup.conf && /docker-entrypoint.sh && nginx -g 'daemon off;'"]
     networks:
       - crs-plugins-net
