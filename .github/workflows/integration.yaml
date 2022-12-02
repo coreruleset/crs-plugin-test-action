@@ -48,13 +48,15 @@ jobs:
           echo "$EXTRA_CONF" > /tmp/crs-additional-setup.conf
           # start container
           docker-compose -f tests/integration/docker-compose.yml up -d ${{ matrix.server }}
+          # Give some room before next phase
+          sleep 2
 
       - name: "Run plugin tests"
         run: |
           ./ftw check -d tests/regression
           ./ftw run -d tests/regression
         env:
-          FTW_LOGFILE: './tests/logs/${{ matrix.server }}/error.log'
+          FTW_LOGFILE: 'tests/logs/${{ matrix.server }}/error.log'
       
       - name: "Tear down tests"
         run: |
