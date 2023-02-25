@@ -6,14 +6,14 @@ There are two workflows:
 
 - regular linting: checks that plugin configuration files and yaml files are sane.
 - plugin ftw tests: each plugin should have their own tests in the `tests/regression` directory.
-  - this workflow receives an input named `config_file` that receives a string that is stored as a
+  - this workflow receives an input named `crs-config` that receives a string that is stored as a
     `crs-setup.conf` file
 
 Take a look at the [template plugin](https://github.com/coreruleset/template-plugin) for an example on how to use these two workflows.
 
 ## Extending CRS config
 
-If your test needs to configure additional variables or you need a particular setup, the `config_file` variable can be used like this:
+If your test needs to configure additional variables or you need a particular setup, the `crs-config` variable can be used like this:
 ```
 jobs:
   plugin-lint:
