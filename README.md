@@ -9,16 +9,18 @@ There are two workflows:
   - this workflow receives an input named `config_file` that receives a string that is stored as a
     `crs-setup.conf` file
 
+Take a look at the [template plugin](https://github.com/coreruleset/template-plugin) for an example on how to use these two workflows.
+
 ## Extending CRS config
 
-If your test needs to configure additional variables of you need a particular setup, the `config_file` variable can be used like this:
+If your test needs to configure additional variables or you need a particular setup, the `config_file` variable can be used like this:
 ```
 jobs:
   plugin-lint:
   integration-tests:
     uses: coreruleset/crs-plugin-test-action/.github/workflows/integration.yaml@main
     with:
-      plugin-config: |
+      crs-config: |
         SecRule &TX:my-rule-exclusions-plugin_enabled "@eq 0" \
           "id:10101010,\
           phase:1,\
