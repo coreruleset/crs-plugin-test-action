@@ -16,17 +16,19 @@ services:
       ACCESSLOG: "/var/log/access.log"
       MODSEC_AUDIT_LOG_FORMAT: Native
       MODSEC_AUDIT_LOG_TYPE: Serial
-      MODSEC_AUDIT_LOG: "/var/log/modsec_audit.log"
+      MODSEC_AUDIT_LOG: "/dev/null"
       MODSEC_TMP_DIR: "/tmp"
       MODSEC_RESP_BODY_ACCESS: "On"
       MODSEC_RESP_BODY_MIMETYPE: "text/plain text/html text/xml application/json"
+      # MODSEC_DEBUG_LOG: "/var/log/debug.log"
+      # MODSEC_DEBUG_LOGLEVEL: 9
       COMBINED_FILE_SIZES: "65535"
       CRS_ENABLE_TEST_MARKER: 1
     ports:
       - 80:80
     volumes:
       - ../../crs/rules:/opt/owasp-crs/rules:ro
-      - ../../plugins:/etc/modsecurity.d/plugins:ro
+      - ../../plugins:/opt/owasp-crs/plugins:ro
       - ../logs/apache:/var/log:rw
     networks:
       - crs-plugins-net
