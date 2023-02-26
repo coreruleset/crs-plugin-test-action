@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   apache:
     container_name: apache
@@ -20,8 +18,6 @@ services:
       MODSEC_TMP_DIR: "/tmp"
       MODSEC_RESP_BODY_ACCESS: "On"
       MODSEC_RESP_BODY_MIMETYPE: "text/plain text/html text/xml application/json"
-      # MODSEC_DEBUG_LOG: "/var/log/debug.log"
-      # MODSEC_DEBUG_LOGLEVEL: 9
       COMBINED_FILE_SIZES: "65535"
       CRS_ENABLE_TEST_MARKER: 1
     ports:
@@ -57,10 +53,9 @@ services:
     ports:
       - 80:80
     volumes:
-      - ../../plugins:/etc/modsecurity.d/plugins
       - ../../crs/rules:/opt/owasp-crs/rules:ro
+      - ../../plugins:/opt/owasp-crs/plugins:ro
       - ../logs/nginx:/var/log/nginx:rw
-    #entrypoint: ["/bin/sh", "-c", "/bin/cp /etc/modsecurity.d/owasp-crs/crs-setup.conf.example /etc/modsecurity.d/owasp-crs/crs-setup.conf && /docker-entrypoint.sh && nginx -g 'daemon off;'"]
     networks:
       - crs-plugins-net
 
