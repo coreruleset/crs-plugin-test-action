@@ -9,7 +9,7 @@ on:                   # yamllint disable-line rule:truthy
         type: string
 
 env:
-  go_ftw_version: "v0.4.4"
+  go_ftw_version: "v0.4.8"
 
 jobs:
   modsecurity-test:
