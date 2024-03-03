@@ -48,4 +48,4 @@ jobs:
         run: |
           pip install --upgrade setuptools
           pip install secrules-parsing
-          secrules-parser -c --output-type github -f plugins/*.conf
+          secrules-parser -c -v --output-type github -f plugins/*.conf

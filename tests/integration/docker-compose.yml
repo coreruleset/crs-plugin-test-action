@@ -26,6 +26,7 @@ services:
       - ../../crs/rules:/opt/owasp-crs/rules:ro
       - ../../plugins:/opt/owasp-crs/plugins:ro
       - ../logs/apache:/var/log:rw
+      - ../../crs-setup.conf.example:/etc/modsecurity.d/owasp-crs/crs-setup.conf.example
     networks:
       - crs-plugins-net
   
@@ -56,11 +57,12 @@ services:
       - ../../crs/rules:/opt/owasp-crs/rules:ro
       - ../../plugins:/opt/owasp-crs/plugins:ro
       - ../logs/nginx:/var/log/nginx:rw
+      - ../../crs-setup.conf.example:/etc/modsecurity.d/owasp-crs/crs-setup.conf.example
     networks:
       - crs-plugins-net
 
   backend:
-    image: eexit/mirror-http-server #docker.io/kennethreitz/httpbin
+    image: eexit/mirror-http-server
     networks:
       - crs-plugins-net
   
