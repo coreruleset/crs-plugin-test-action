@@ -1,13 +1,12 @@
 services:
   apache:
     container_name: apache
-    image: owasp/modsecurity-crs:apache
+    image: owasp/modsecurity-crs:4-apache-202404131004
     depends_on:
       - backend
     environment:
       SERVERNAME: "_default_"
       BACKEND: "http://backend:8080"
-      PORT: "80"
       MODSEC_RULE_ENGINE: "DetectionOnly"
       BLOCKING_PARANOIA: 4
       ERRORLOG: "/var/log/error.log"
@@ -21,7 +20,7 @@ services:
       COMBINED_FILE_SIZES: "65535"
       CRS_ENABLE_TEST_MARKER: 1
     ports:
-      - 80:80
+      - 80:8080
     volumes:
       - ../../crs/rules:/opt/owasp-crs/rules:ro
       - ../../plugins:/opt/owasp-crs/plugins:ro
@@ -32,13 +31,12 @@ services:
   
   nginx:
     container_name: nginx
-    image: owasp/modsecurity-crs:nginx
+    image: owasp/modsecurity-crs:4-nginx-202404070904
     depends_on:
       - backend
     environment:
       SERVERNAME: "_"
       BACKEND: "http://backend:8080"
-      PORT: "80"
       MODSEC_RULE_ENGINE: DetectionOnly
       BLOCKING_PARANOIA: 4
       ERRORLOG: "/var/log/nginx/error.log"
@@ -52,7 +50,7 @@ services:
       COMBINED_FILE_SIZES: "65535"
       CRS_ENABLE_TEST_MARKER: 1
     ports:
-      - 80:80
+      - 80:8080
     volumes:
       - ../../crs/rules:/opt/owasp-crs/rules:ro
       - ../../plugins:/opt/owasp-crs/plugins:ro
