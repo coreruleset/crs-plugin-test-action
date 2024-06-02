@@ -55,12 +55,12 @@ services:
       - ../../crs/rules:/opt/owasp-crs/rules:ro
       - ../../plugins:/opt/owasp-crs/plugins:ro
       - ../logs/nginx:/var/log/nginx:rw
-      - ../../crs-setup.conf.example:/etc/modsecurity.d/owasp-crs/crs-setup.conf.example
+      - ../../crs/crs-setup.conf.example:/etc/modsecurity.d/owasp-crs/crs-setup.conf.example
     networks:
       - crs-plugins-net
 
   backend:
-    image: eexit/mirror-http-server
+    image: ghcr.io/coreruleset/albedo:0.0.14
     networks:
       - crs-plugins-net
   
