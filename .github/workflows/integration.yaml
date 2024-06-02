@@ -7,6 +7,10 @@ on:                   # yamllint disable-line rule:truthy
       crs-config:
         required: false
         type: string
+      backends:
+        required: false
+        type: string
+        default: '["apache", "nginx"]'
 
 env:
   go_ftw_version: "v0.6.4"
@@ -17,7 +21,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        server: [apache, nginx]
+        backend: ${{ fromJSON(inputs.backends) }}
         crs_version: [nightly]
 
     steps:
@@ -38,27 +42,27 @@ jobs:
           curl -skL https://raw.githubusercontent.com/coreruleset/crs-plugin-test-action/main/tests/integration/docker-compose.yml \
             -o tests/integration/docker-compose.yml
       
-      - name: "Start ${{ matrix.server }} "
+      - name: "Start ${{ matrix.backend }} "
         env:
           EXTRA_CONF: ${{ inputs.crs-config }}
         run: |
           # create logs directory
-          mkdir -p tests/logs/${{ matrix.server }}
-          chmod a+rw tests/logs/${{ matrix.server }}
+          mkdir -p tests/logs/${{ matrix.backend }}
+          chmod a+rw tests/logs/${{ matrix.backend }}
           # use crs-config, if any
           echo "$EXTRA_CONF" > /tmp/crs-additional-setup.conf
           # start container
-          docker-compose -f tests/integration/docker-compose.yml up -d ${{ matrix.server }}
-          docker logs -f ${{ matrix.server }} &
+          docker-compose -f tests/integration/docker-compose.yml up -d ${{ matrix.backend }}
+          docker logs -f ${{ matrix.backend }} &
           # Give some room before next phase
           sleep 2
 
       - name: "Run plugin tests"
         run: |
-          ./ftw check -d tests/regression
-          ./ftw run -d tests/regression
+          ./ftw check -d tests/regression/tests
+          ./ftw run -d tests/regression/tests --show-failures-only
         env:
-          FTW_LOGFILE: 'tests/logs/${{ matrix.server }}/error.log'
+          FTW_LOGFILE: 'tests/logs/${{ matrix.backend }}/error.log'
       
       - name: "Tear down tests"
         run: |
