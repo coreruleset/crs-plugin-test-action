@@ -13,10 +13,10 @@ jobs:
     # check why is failing and change afterwards
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
 
       - name: Lint Yaml
-        uses: ibiqlik/action-yamllint@v3
+        uses: ibiqlik/action-yamllint@2576378a8e339169678f9939646ee3ee325e845c # v3
         with:
           format: github
           file_or_dir: tests/regression
@@ -40,7 +40,7 @@ jobs:
         id: linelint
 
       - name: Set up Python 3
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5
         with:
           python-version: 3.8
 
