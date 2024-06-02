@@ -2,5 +2,8 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "local>coreruleset/renovate-config"
-  ]
+  ],
+  "docker": {
+    "fileMatch": ["^tests/integration/docker-compose.\\.yml$"]
+  }
 }
