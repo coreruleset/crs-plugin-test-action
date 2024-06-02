@@ -3,14 +3,7 @@
   "extends": [
     "local>coreruleset/renovate-config"
   ],
-  "packageRules": [
-    {
-      "matchCategories": [
-        "docker"
-      ],
-      "fileMatch": [
-        "^tests/integration/docker-compose.\\.yml$"
-      ]
-    }
-  ]
+  "docker-compose": {
+    "fileMatch": ["^tests/integration/docker-compose.\\.yml$"]
+  }
 }
