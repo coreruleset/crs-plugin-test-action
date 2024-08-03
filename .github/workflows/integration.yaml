@@ -52,7 +52,7 @@ jobs:
           # use crs-config, if any
           echo "$EXTRA_CONF" > /tmp/crs-additional-setup.conf
           # start container
-          docker-compose -f tests/integration/docker-compose.yml up -d ${{ matrix.backend }}
+          docker compose -f tests/integration/docker-compose.yml up -d ${{ matrix.backend }}
           docker logs -f ${{ matrix.backend }} &
           # Give some room before next phase
           sleep 2
@@ -66,4 +66,4 @@ jobs:
       
       - name: "Tear down tests"
         run: |
-          docker-compose -f tests/integration/docker-compose.yml down -t 0
+          docker compose -f tests/integration/docker-compose.yml down -t 0
