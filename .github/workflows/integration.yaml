@@ -28,14 +28,17 @@ jobs:
       - name: "Checkout repo"
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
+      - name: "Checkout CRS"
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          repository: coreruleset/coreruleset
+          path: crs
+
       - name: "Install dependencies"
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          mkdir -p crs
           mkdir -p tests/integration
-          # Get CRS
-          gh release download -R coreruleset/coreruleset -A tar.gz -O - ${{ matrix.crs_version }} | tar -xzf - --strip-components=1 -C crs
           # Get go-ftw
           gh release download -R coreruleset/go-ftw -p 'ftw_*_linux_amd64.tar.gz' -O - ${{ env.go_ftw_version }} | tar -xzf - ftw
           # get latest docker-compose.yml file
