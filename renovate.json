@@ -4,6 +4,8 @@
     "local>coreruleset/renovate-config"
   ],
   "docker-compose": {
-    "fileMatch": ["^tests/integration/docker-compose.\\.yml$"]
+    "managerFilePatterns": [
+      "/^tests/integration/docker-compose.\\.yml$/"
+    ]
   }
 }
