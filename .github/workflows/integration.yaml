@@ -13,7 +13,8 @@ on:                   # yamllint disable-line rule:truthy
         default: '["apache", "nginx"]'
 
 env:
-  go_ftw_version: "v0.6.4"
+  # renovate: depName=coreruleset/go-ftw datasource=github-releases
+  GO_FTW_VERSION: "v0.6.4"
 
 jobs:
   modsecurity-test:
@@ -40,7 +41,7 @@ jobs:
         run: |
           mkdir -p tests/integration
           # Get go-ftw
-          gh release download -R coreruleset/go-ftw -p 'ftw_*_linux_amd64.tar.gz' -O - ${{ env.go_ftw_version }} | tar -xzf - ftw
+          gh release download -R coreruleset/go-ftw -p 'ftw_*_linux_amd64.tar.gz' -O - ${{ env.GO_FTW_VERSION }} | tar -xzf - ftw
           # get latest docker-compose.yml file
           curl -skL https://raw.githubusercontent.com/coreruleset/crs-plugin-test-action/main/tests/integration/docker-compose.yml \
             -o tests/integration/docker-compose.yml
