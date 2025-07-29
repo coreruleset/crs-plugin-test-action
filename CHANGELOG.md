@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.0](https://github.com/coreruleset/crs-plugin-test-action/compare/v1.0.0...v2.0.0) (2025-07-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* update go-ftw release ([#31](https://github.com/coreruleset/crs-plugin-test-action/issues/31))
+
+### Bug Fixes
+
+* allow comments for release-please action ([#36](https://github.com/coreruleset/crs-plugin-test-action/issues/36)) ([eb693d3](https://github.com/coreruleset/crs-plugin-test-action/commit/eb693d3a34e8f1e15a9c2f4f9da3060a2cdbbc5f))
+* update go-ftw release ([#31](https://github.com/coreruleset/crs-plugin-test-action/issues/31)) ([7ccf831](https://github.com/coreruleset/crs-plugin-test-action/commit/7ccf83147490d241ca0a092ab985ba90816618b9))
+
 ## 1.0.0 (2025-07-29)
 
 
