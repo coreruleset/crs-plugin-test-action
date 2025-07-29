@@ -13,7 +13,7 @@ on:                   # yamllint disable-line rule:truthy
         default: '["apache", "nginx"]'
 
 env:
-  # renovate: depName=coreruleset/go-ftw datasource=github-releases
+  # renovate: datasource=github-releases depName=coreruleset/go-ftw
   GO_FTW_VERSION: "v0.6.4"
 
 jobs:
@@ -23,7 +23,6 @@ jobs:
       fail-fast: true
       matrix:
         backend: ${{ fromJSON(inputs.backends) }}
-        crs_version: [nightly]
 
     steps:
       - name: "Checkout repo"
