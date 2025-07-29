@@ -1,7 +1,7 @@
 services:
   apache:
     container_name: apache
-    image: owasp/modsecurity-crs:4-apache-202404131004
+    image: owasp/modsecurity-crs:4-apache-202404131004@sha256:9c20dd4756378de04c3587911efdf37c15614403c0540e008f16ca1cdbc63cba
     depends_on:
       - backend
     environment:
@@ -31,7 +31,7 @@ services:
   
   nginx:
     container_name: nginx
-    image: owasp/modsecurity-crs:4-nginx-202404070904
+    image: owasp/modsecurity-crs:4-nginx-202404070904@sha256:71c4719eadc99b0e5df30aa8b07ffb93a71f9e69b3aee59a9029e7cef3f528d9
     depends_on:
       - backend
     environment:
