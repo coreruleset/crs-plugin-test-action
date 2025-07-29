@@ -14,7 +14,7 @@ on:                   # yamllint disable-line rule:truthy
 
 env:
   # renovate: datasource=github-releases depName=coreruleset/go-ftw
-  GO_FTW_VERSION: "v0.6.4"
+  GO_FTW_VERSION: "v1.3.0"
 
 jobs:
   modsecurity-test:
