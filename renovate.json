@@ -1,11 +1,13 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "github>coreruleset/renovate-config"
+    "github>coreruleset/renovate-config",
+    "customManagers:githubActionsVersions",
+    "schedule:weekly"
   ],
+  "ignorePaths": [],
   "docker-compose": {
-    "managerFilePatterns": [
-      "/^tests/integration/docker-compose.\\.yml$/"
-    ]
+      "enabled": true, 
+      "managerFilePatterns": ["/^tests\/integration\/docker-compose.\\.yml$/"]
   }
 }
