@@ -18,7 +18,7 @@ If your test needs to configure additional variables or you need a particular se
 jobs:
   plugin-lint:
   integration-tests:
-    uses: coreruleset/crs-plugin-test-action/.github/workflows/integration.yaml@main
+    uses: coreruleset/crs-plugin-test-action/.github/workflows/integration.yaml@v2.0.0
     with:
       crs-config: |
         SecRule &TX:my-rule-exclusions-plugin_enabled "@eq 0" \
