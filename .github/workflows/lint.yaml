@@ -4,6 +4,8 @@ name: Lint Plugin
 on:                  # yamllint disable-line rule:truthy
   workflow_call:
 
+permissions:
+  contents: read
 
 jobs:
   check-syntax:
@@ -36,7 +38,7 @@ jobs:
                 min-spaces-from-content: 1
 
       - name: Linelint
-        uses: fernandrone/linelint@master
+        uses: fernandrone/linelint@7907a5dca0c28ea7dd05c6d8d8cacded713aca11 # master
         id: linelint
 
       - name: Set up Python 3
