@@ -3,9 +3,6 @@ name: Integration/Regression
 
 on:                   # yamllint disable-line rule:truthy
   workflow_call:
-
-permissions:
-  contents: read
     inputs:
       crs-config:
         required: false
@@ -14,6 +11,9 @@ permissions:
         required: false
         type: string
         default: '["apache", "nginx"]'
+
+permissions:
+  contents: read
 
 env:
   # renovate: datasource=github-releases depName=coreruleset/go-ftw
