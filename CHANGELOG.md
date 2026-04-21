@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.1](https://github.com/coreruleset/crs-plugin-test-action/compare/v3.0.0...v3.0.1) (2026-04-21)
+
+
+### Bug Fixes
+
+* harden GitHub Actions workflows ([#46](https://github.com/coreruleset/crs-plugin-test-action/issues/46)) ([7e1ee6d](https://github.com/coreruleset/crs-plugin-test-action/commit/7e1ee6d07105ae3cb6eec95e45acb5e1a895e3d4))
+* move the permissions block to the correct position ([#48](https://github.com/coreruleset/crs-plugin-test-action/issues/48)) ([ab51942](https://github.com/coreruleset/crs-plugin-test-action/commit/ab5194208383f9fdd1a79aa364b6185a2b8f3eb7))
+
 ## [2.0.0](https://github.com/coreruleset/crs-plugin-test-action/compare/v1.0.0...v2.0.0) (2025-07-29)
 
 
