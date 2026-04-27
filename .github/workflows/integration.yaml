@@ -17,7 +17,7 @@ permissions:
 
 env:
   # renovate: datasource=github-releases depName=coreruleset/go-ftw
-  GO_FTW_VERSION: "v2.1.0"
+  GO_FTW_VERSION: "v2.1.1"
 
 jobs:
   modsecurity-test:
