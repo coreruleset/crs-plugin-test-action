@@ -32,7 +32,7 @@ jobs:
         run: |
           set -euo pipefail
           lts=$(gh api --paginate repos/coreruleset/coreruleset/releases \
-            --jq '[.[] | select(.prerelease == false) | select(.name | test("\\(LTS\\)"))][0].tag_name')
+            --jq '[.[] | select(.prerelease == false) | select((.name // "") | test("\\(LTS\\)"))][0].tag_name')
           if [ -z "$lts" ] || [ "$lts" = "null" ]; then
             echo "::error::Could not resolve current CRS LTS release tag" >&2
             exit 1
