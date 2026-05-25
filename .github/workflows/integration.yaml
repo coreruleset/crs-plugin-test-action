@@ -20,22 +20,48 @@ env:
   GO_FTW_VERSION: "v2.1.0"
 
 jobs:
+  resolve-crs-refs:
+    runs-on: ubuntu-latest
+    outputs:
+      refs: ${{ steps.resolve.outputs.refs }}
+    steps:
+      - name: "Resolve current LTS tag"
+        id: resolve
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          lts=$(gh api --paginate repos/coreruleset/coreruleset/releases \
+            --jq '[.[] | select(.prerelease == false) | select((.name // "") | test("\\(LTS\\)"))][0].tag_name')
+          if [ -z "$lts" ] || [ "$lts" = "null" ]; then
+            echo "::error::Could not resolve current CRS LTS release tag" >&2
+            exit 1
+          fi
+          echo "Resolved LTS tag: $lts"
+          printf 'refs=["main","%s"]\n' "$lts" >> "$GITHUB_OUTPUT"
+
   modsecurity-test:
+    needs: resolve-crs-refs
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
         backend: ${{ fromJSON(inputs.backends) }}
+        crs-ref: ${{ fromJSON(needs.resolve-crs-refs.outputs.refs) }}
 
     steps:
       - name: "Checkout repo"
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          persist-credentials: false
 
-      - name: "Checkout CRS"
+      - name: "Checkout CRS (${{ matrix.crs-ref }})"
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           repository: coreruleset/coreruleset
+          ref: ${{ matrix.crs-ref }}
           path: crs
+          persist-credentials: false
 
       - name: "Install dependencies"
         env:
@@ -48,27 +74,28 @@ jobs:
           curl -skL https://raw.githubusercontent.com/coreruleset/crs-plugin-test-action/main/tests/integration/docker-compose.yml \
             -o tests/integration/docker-compose.yml
       
-      - name: "Start ${{ matrix.backend }} "
+      - name: "Start ${{ matrix.backend }}"
         env:
+          BACKEND: ${{ matrix.backend }}
           EXTRA_CONF: ${{ inputs.crs-config }}
         run: |
           # create logs directory
-          mkdir -p tests/logs/${{ matrix.backend }}
-          chmod a+rw tests/logs/${{ matrix.backend }}
+          mkdir -p "tests/logs/${BACKEND}"
+          chmod a+rw "tests/logs/${BACKEND}"
           # use crs-config, if any
           echo "$EXTRA_CONF" > /tmp/crs-additional-setup.conf
           # start container
-          docker compose -f tests/integration/docker-compose.yml up -d ${{ matrix.backend }}
-          docker logs -f ${{ matrix.backend }} &
+          docker compose -f tests/integration/docker-compose.yml up -d "${BACKEND}"
+          docker logs -f "${BACKEND}" &
           # Give some room before next phase
           sleep 2
 
       - name: "Run plugin tests"
+        env:
+          FTW_LOGFILE: 'tests/logs/${{ matrix.backend }}/error.log'
         run: |
           ./ftw check -d tests/regression
           ./ftw run -d tests/regression --show-failures-only
-        env:
-          FTW_LOGFILE: 'tests/logs/${{ matrix.backend }}/error.log'
       
       - name: "Tear down tests"
         run: |
