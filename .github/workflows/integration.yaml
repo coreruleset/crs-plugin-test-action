@@ -17,7 +17,7 @@ permissions:
 
 env:
   # renovate: datasource=github-releases depName=coreruleset/go-ftw
-  GO_FTW_VERSION: "v2.1.0"
+  GO_FTW_VERSION: "v2.4.0"
 
 jobs:
   resolve-crs-refs:
@@ -51,12 +51,12 @@ jobs:
 
     steps:
       - name: "Checkout repo"
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
 
       - name: "Checkout CRS (${{ matrix.crs-ref }})"
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           repository: coreruleset/coreruleset
           ref: ${{ matrix.crs-ref }}
