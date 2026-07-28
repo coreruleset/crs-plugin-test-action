@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.2](https://github.com/coreruleset/crs-plugin-test-action/compare/v3.0.1...v3.0.2) (2026-07-28)
+
+
+### Bug Fixes
+
+* use the same setup to ensure container availability as core ([#53](https://github.com/coreruleset/crs-plugin-test-action/issues/53)) ([deb03b0](https://github.com/coreruleset/crs-plugin-test-action/commit/deb03b0ef2f24b3d2b5cbc5fc6f1b6d3792cc319))
+
 ## [3.0.1](https://github.com/coreruleset/crs-plugin-test-action/compare/v3.0.0...v3.0.1) (2026-05-25)
 
 
