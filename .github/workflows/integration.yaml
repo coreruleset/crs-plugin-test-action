@@ -83,13 +83,19 @@ jobs:
           mkdir -p "tests/logs/${BACKEND}"
           chmod a+rw "tests/logs/${BACKEND}"
           # use crs-config, if any
-          echo "$EXTRA_CONF" > /tmp/crs-additional-setup.conf
+          echo "${EXTRA_CONF}" > /tmp/crs-additional-setup.conf
           # start container
           docker compose -f tests/integration/docker-compose.yml up -d "${BACKEND}"
-          docker logs -f "${BACKEND}" &
-          # Give some room before next phase
-          sleep 2
+          
+          echo "Waiting for container to become ready"
+          curl --retry 5 --retry-connrefused --retry-delay 2 localhost || true
+          sleep 5
 
+          docker compose -f tests/integration/docker-compose.yml logs
+          if ! [ "$(docker inspect ${BACKEND} --format='{{.State.Running}}')" = "true" ]; then
+            echo "Web server failed to start. Aborting."
+            exit 1
+          fi
       - name: "Run plugin tests"
         env:
           FTW_LOGFILE: 'tests/logs/${{ matrix.backend }}/error.log'
