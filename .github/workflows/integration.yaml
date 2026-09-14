@@ -17,7 +17,7 @@ permissions:
 
 env:
   # renovate: datasource=github-releases depName=coreruleset/go-ftw
-  GO_FTW_VERSION: "v2.4.0"
+  GO_FTW_VERSION: "v2.5.0"
 
 jobs:
   resolve-crs-refs:
